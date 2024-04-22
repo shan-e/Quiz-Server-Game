@@ -7,4 +7,6 @@ add_executable(COMP20200A3
         server.c
         client.c
         QuizDB.h
+        functions.h
+        functions.c
 )

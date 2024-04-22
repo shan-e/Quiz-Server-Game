@@ -61,8 +61,8 @@ build CMakeFiles/COMP20200A3.dir/client.c.o: C_COMPILER__COMP20200A3_unscanned_D
   OBJECT_DIR = CMakeFiles/COMP20200A3.dir
   OBJECT_FILE_DIR = CMakeFiles/COMP20200A3.dir
 
-build CMakeFiles/COMP20200A3.dir/printquiz.c.o: C_COMPILER__COMP20200A3_unscanned_Debug /Users/shane/Desktop/Projects/C/COMP20200A3/printquiz.c || cmake_object_order_depends_target_COMP20200A3
-  DEP_FILE = CMakeFiles/COMP20200A3.dir/printquiz.c.o.d
+build CMakeFiles/COMP20200A3.dir/fucntions.c.o: C_COMPILER__COMP20200A3_unscanned_Debug /Users/shane/Desktop/Projects/C/COMP20200A3/fucntions.c || cmake_object_order_depends_target_COMP20200A3
+  DEP_FILE = CMakeFiles/COMP20200A3.dir/fucntions.c.o.d
   FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk -mmacosx-version-min=13.5 -fcolor-diagnostics
   OBJECT_DIR = CMakeFiles/COMP20200A3.dir
   OBJECT_FILE_DIR = CMakeFiles/COMP20200A3.dir
@@ -75,7 +75,7 @@ build CMakeFiles/COMP20200A3.dir/printquiz.c.o: C_COMPILER__COMP20200A3_unscanne
 #############################################
 # Link the executable COMP20200A3
 
-build COMP20200A3: C_EXECUTABLE_LINKER__COMP20200A3_Debug CMakeFiles/COMP20200A3.dir/server.c.o CMakeFiles/COMP20200A3.dir/client.c.o CMakeFiles/COMP20200A3.dir/printquiz.c.o
+build COMP20200A3: C_EXECUTABLE_LINKER__COMP20200A3_Debug CMakeFiles/COMP20200A3.dir/server.c.o CMakeFiles/COMP20200A3.dir/client.c.o CMakeFiles/COMP20200A3.dir/fucntions.c.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk -mmacosx-version-min=13.5
   OBJECT_DIR = CMakeFiles/COMP20200A3.dir
   POST_BUILD = :
