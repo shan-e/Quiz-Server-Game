@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <time.h>
+#include <errno.h>
 
 #include "QuizDB.h" // quiz database
 
@@ -29,11 +30,34 @@ void randomiseQuestions(char *questions[], char *answers[], int numOfQuestions) 
 // send questions and prompts to client and receive answers
 void toClient(int clientSocket) { // take in client socket file descriptor
     char buffer[BUFFER_SIZE]; // console output
-    int score = 0; // player final score
+    char* buff = buffer;
+    size_t totalSent = 0;
 
+    int score = 0; // player final score
+    memset(buffer, 0, BUFFER_SIZE); // clear buffer with 0s via memset
     // assign string to buffer and send to client using write
-    snprintf(buffer, BUFFER_SIZE, "Welcome to Unix Programming Quiz!\n");
-    write(clientSocket, buffer, strlen(buffer));
+    snprintf(buffer, BUFFER_SIZE, "Welcome to Unix Programming Quiz!\n"
+                                  "The quiz comprises five questions posed to you one after the other.\n"
+                                  "You have only one attempt to answer a question.\n"
+                                  "Your final score will be sent to you after conclusion of the quiz.\n"
+                                  "To start the quiz, press Y and <enter>.\n"
+                                  "To quit the quiz, press q and <enter>.\n");
+    write(clientSocket, buffer, BUFFER_SIZE);
+
+//    int count = 0;
+//    int size = strlen(buffer);
+//    while(totalSent < BUFFER_SIZE) {
+//        ssize_t numberwrite = write(clientSocket, buffer, BUFFER_SIZE - totalSent);
+//        if (numberwrite <= 0)
+//            if (numberwrite == -1 && errno == EINTR) continue;
+//            else {
+//                printf("write error");
+//                exit(-1);
+//            }
+//        totalSent+=numberwrite;
+//        buff += numberwrite;
+//    }
+
 
     // if client inputs anything except 'Y' or if error occurs reading, close the client socket and exit while loop
     if (read(clientSocket, buffer, BUFFER_SIZE) < 0 || buffer[0] != 'Y') { close(clientSocket); return; }
@@ -85,7 +109,7 @@ int main(int argc, char *argv[]) {
     // bind socket server to given address, if error occurs binding, print issue
     if (bind(serverSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) printError("Error on binding");
     listen(serverSocket, 0); // socket listens for incoming connections
-    printf("Listening on ip: %s port: %d\n", ipAddress, portNumber); // print connection info to console
+    printf("<Listening on %s:%d>\n<Press ctrl-C to terminate>\n", ipAddress, portNumber); // print connection info to console
 
     for (;;) { // keep server open and running for client to connect
         socklen_t clientSize = sizeof(clientAddress); // length of client address

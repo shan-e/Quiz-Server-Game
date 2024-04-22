@@ -5,7 +5,7 @@
 #include <arpa/inet.h>
 #include <ctype.h>
 
-#define BUFFER_SIZE 256 // size for holding console output
+#define BUFFER_SIZE 10000 // size for holding console output
 
 // error handling, take string and print as perror and exit
 void printError(const char *msg) { perror(msg); exit(1); }
@@ -34,25 +34,28 @@ int main(int argc, char *argv[]) {
     if (read(clientSocket, buffer, BUFFER_SIZE) < 0) printError("Error reading from socket");
 
     printf("%s", buffer); // print welcome message to console
-
+    memset(buffer, 0, BUFFER_SIZE); // reset buffer to 0
     scanf(" %c", &response); // scan response char, space present for handling new line
     response = toupper(response); // ensures input is uppercase
     if (response != 'Y') { close(clientSocket); exit(0); } // if anything but 'Y', close client socket and exit
     write(clientSocket, &response, sizeof(response)); // write response to clientSocket, server then reads given data.
-
+    memset(buffer, 0, BUFFER_SIZE); // reset buffer to 0
     for (int i = 0; i < 5; i++) {
+        memset(buffer, 0, BUFFER_SIZE); // reset buffer to 0
         // read from client socket, if error occurs, print error
         if (read(clientSocket, buffer, BUFFER_SIZE) < 0) printError("Error reading from socket");
         printf("%s", buffer); // print out buffer to client console
         memset(buffer, 0, BUFFER_SIZE); // reset buffer to 0
         scanf("%s", buffer); // take in answer as string
         write(clientSocket, buffer, strlen(buffer)); // write input to client socket
+        memset(buffer, 0, BUFFER_SIZE); // reset buffer to 0
     }
+    memset(buffer, 0, BUFFER_SIZE); // reset buffer to 0
 
     // read final score sent by server to client, if error occurs, print out perror
     if (read(clientSocket, buffer, BUFFER_SIZE) < 0) printError("Error reading from socket");
 
-    printf("HEY %s", buffer); // print out final score to console
+    printf("%s", buffer); // print out final score to console
 
     close(clientSocket); // close client socket
     return 0;
