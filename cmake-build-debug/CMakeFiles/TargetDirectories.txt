@@ -1,0 +1,3 @@
+/Users/shane/Desktop/Projects/C/COMP20200A3/cmake-build-debug/CMakeFiles/COMP20200A3.dir
+/Users/shane/Desktop/Projects/C/COMP20200A3/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/shane/Desktop/Projects/C/COMP20200A3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
