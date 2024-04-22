@@ -1,4 +1,3 @@
-// required libraries
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,7 +52,7 @@ int main(int argc, char *argv[]) {
     // read final score sent by server to client, if error occurs, print out perror
     if (read(clientSocket, buffer, BUFFER_SIZE) < 0) printError("Error reading from socket");
 
-    printf("%s", buffer); // print out final score to console
+    printf("HEY %s", buffer); // print out final score to console
 
     close(clientSocket); // close client socket
     return 0;

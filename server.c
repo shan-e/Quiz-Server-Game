@@ -1,5 +1,3 @@
-// TCP Quiz Server
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,6 +26,7 @@ void randomiseQuestions(char *questions[], char *answers[], int numOfQuestions) 
         swap(&answers[i], &answers[j]); // swap answers at index i and j
     }
 }
+// send questions and prompts to client and receive answers
 void toClient(int clientSocket) { // take in client socket file descriptor
     char buffer[BUFFER_SIZE]; // console output
     int score = 0; // player final score
@@ -71,34 +70,33 @@ int main(int argc, char *argv[]) {
     const char *ipAddress = argv[1]; // ip address is second argument given
     int portNumber = atoi(argv[2]); // port number is third argument given and converted to int
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);// creating sequential ipv4 server socket
-    struct sockaddr_in server_addr, client_addr;
+    struct sockaddr_in serverAddress;
+    struct sockaddr_in clientAddress;
 
     if (argc != 3) printServerUsage(); // print usage if under 3 arguments given
-    if (serverSocket < 0) printError("Error opening socket");
+    if (serverSocket < 0) printError("Error opening socket"); // if error creating server socket, print issue
 
-    memset((char *) &server_addr, 0, sizeof(server_addr));
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = inet_addr(ipAddress);
-    server_addr.sin_port = htons(portNumber);
+    // ensure server info is formatted properly but initialising address to zero
+    memset((char *) &serverAddress, 0, sizeof(serverAddress));
+    serverAddress.sin_family = AF_INET; // ensure ipv4 address
+    serverAddress.sin_addr.s_addr = inet_addr(ipAddress); // convert ip string to binary
+    serverAddress.sin_port = htons(portNumber); // sets port number using htons converting
 
-    // Bind socket to address
-    if (bind(serverSocket, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) printError("Error on binding");
+    // bind socket server to given address, if error occurs binding, print issue
+    if (bind(serverSocket, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) printError("Error on binding");
+    listen(serverSocket, 0); // socket listens for incoming connections
+    printf("Listening on ip: %s port: %d\n", ipAddress, portNumber); // print connection info to console
 
-    // Listen for incoming connections
-    listen(serverSocket, 5);
-    printf("Listening on %s:%d. Press ctrl-C to terminate.\n", ipAddress, portNumber);
-
-    while (1) {
-        socklen_t clientLen = sizeof(client_addr);
-        int client_socket = accept(serverSocket, (struct sockaddr *) &client_addr, &clientLen);
-        if (client_socket < 0) printError("Error on accept");
-
-        printf("Client connected.\n");
-
-        // Serve the connected client
-        toClient(client_socket);
+    for (;;) { // keep server open and running for client to connect
+        socklen_t clientSize = sizeof(clientAddress); // length of client address
+        // file descriptor accepts connections from given client socket to server socket
+        int clientSocket = accept(serverSocket, (struct sockaddr *) &clientAddress, &clientSize);
+        // if there is error connecting client socket, print issue
+        if (clientSocket < 0) printError("Error accepting connection");
+        else printf("Client connected!!\n"); // otherwise print established
+        toClient(clientSocket); // read and write data to client via client socket
     }
 
-    close(serverSocket);
+    close(serverSocket); // close server socket
     return 0;
 }
